@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9TM065QrtzDKoxYVhZ9s2XaShvDtxj5jx_g&usqp=CAU);
+      }
+      .header {
+        display: flex;
+        border-radius: 5px;
+        background-color: rgb(238, 214, 178);
+        color: blue;
+        margin: auto;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        width: 98%;
+        justify-content: space-around;
+      }
+
+      #cont {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-gap: 30px;
+        align-content: center;
+        justify-content: center;
+        width: 98%;
+        margin: auto;
+        border-radius: 8px;
+      }
+
+      .h {
+        margin: auto;
+      }
+
+      .child {
+        width: 75%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: rgb(247, 240, 240);
+        border: 1px dashed red;
+        overflow: hidden;
+        border-radius: 10px;
+      }
+      img {
+        width: 100%;
+        height: 200px;
+      }
+
+      button:hover {
+        cursor: pointer;
+      }
+
+      button {
+        margin: auto 20px;
+      }
+
+      h2 {
+        text-align: center;
+        font-family: "Times New Roman";
+        font-weight: bold;
+        background-color: #b65927;
+        color: whitesmoke;
+        overflow: hidden;
+        border-radius: 3px;
+      }
+
+      p {
+        border: 1px ridge white;
+        background-color: black;
+        color: whitesmoke;
+        text-align: center;
+        border-radius: 3px;
+        font-size: 18px;
+        font-family: "Times New Roman";
+        font-weight: bold;
+        width: 50%;
+        margin: 15px 65px;
+      }
+      #btn {
+        float: right;
+        background-color: black;
+        color: white;
+        padding: 5px 50px;
+        font-size: 25px;
+        margin: auto;
+      }
+
+
+      select{
+          padding: 15px 22px;
+          margin-left: 10px;
+          background-color: thistle;
+          border-radius: 5px;
+          cursor: pointer;
+          border: 1px solid black;
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="h"><h1>Product Page</h1></div>
+      <button id="btn">Go To Cart</button>
+    </div>
+    <select name="" id="priceSort" onchange="handlePriceSort()">
+      <option value="">-----</option>
+      <option value="low">Low to High</option>
+      <option value="high">High to Low</option>
+    </select>
+
+    <select name="" id="nameSort" onchange="handleNameSort()">
+      <option value="">-----</option>
+      <option value="asc">Ascending</option>
+      <option value="dsc">Descending</option>
+    </select>
+
+    <select id="filter" onchange="filterCat()">
+      <option value="">Filter by category</option>
+      <option value="HeadPhones">Head phone</option>
+      <option value="shoes">Shoes</option>
+      <option value="shirt">Shirt</option>
+    </select>
+    <div id="cont"></div>
+  </body>
+</html>
+
+<script>
+  var product = JSON.parse(localStorage.getItem("shoppingItems"));
+  displayItem(product);
+
+  var cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+  function handlePriceSort() {
+    var selected = document.querySelector("#priceSort").value;
+    console.log(selected);
+    if (selected == "high") {
+      product.sort(function (a, b) {
+        return Number(b.price) - Number(a.price);
+      });
+    }
+    if (selected == "low") {
+      product.sort(function (a, b) {
+        return Number(a.price) - Number(b.price);
+      });
+    }
+    //console.log(products);
+    displayItem(product);
+  }
+
+  function handleNameSort() {
+    var selected = document.querySelector("#nameSort").value;
+    console.log(selected);
+
+    if (selected == "asc") {
+      product.sort(function (a, b) {
+        if (a.name > b.name) return 1;
+        if (a.name < b.name) return -1;
+        return 0;
+      });
+    }
+    if (selected == "dsc") {
+      product.sort(function (a, b) {
+        if (a.name > b.name) return -1;
+        if (a.name < b.name) return 1;
+        return 0;
+      });
+    }
+    displayItem(product);
+  }
+
+  function filterCat() {
+    var selected = document.querySelector("#filter").value;
+    //console.log(selected)
+    var filterList = product.filter(function (elem) {
+      return elem.type == selected;
+    });
+    console.log(filterList);
+    displayItem(filterList);
+  }
+
+  function displayItem(product) {
+    document.querySelector("#cont").textContent = "";
+    product.map(function (elem, index) {
+      // console.log(index);
+      var div = document.createElement("div");
+      div.className = "child";
+
+      var img = document.createElement("img");
+      img.setAttribute("src", elem.image);
+
+      var h2 = document.createElement("h2");
+      h2.textContent = elem.name;
+
+      var price = document.createElement("p");
+      price.innerText = "Price  :  $ " + elem.price;
+
+      var button = document.createElement("button");
+      button.textContent = "add to cart";
+      button.style.padding = "10px 10px";
+      button.style.backgroundColor = "skyblue";
+      button.style.borderRadius = "5px";
+      button.addEventListener("click", function () {
+        addToCart(elem);
+      });
+
+      var td4 = document.createElement("button");
+      td4.innerText = "delete";
+      td4.style.padding = "10px 25px";
+      td4.style.backgroundColor = "orange";
+      td4.style.borderRadius = "5px";
+      td4.addEventListener("click", function () {
+        // console.log(index, "index");
+        deleteTask(index);
+      });
+      td4.addEventListener("click", refresh);
+
+      div.append(img, h2, price, button, td4);
+      document.querySelector("#cont").append(div);
+    });
+  }
+
+  function addToCart(elem) {
+    //  console.log(elem)
+    cart.push(elem);
+    localStorage.setItem("cartItems", JSON.stringify(cart));
+  }
+
+  function deleteTask(index) {
+    product.splice(index, 1);
+    localStorage.setItem("shoppingItems", JSON.stringify(product));
+    displayItem(product)
+  }
+
+  function refresh() {
+    location.reload();
+  }
+
+  document.querySelector("#btn").addEventListener("click", function () {
+    window.location.href = "cart.html";
+  });
+</script>

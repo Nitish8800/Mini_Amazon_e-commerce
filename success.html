@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9TM065QrtzDKoxYVhZ9s2XaShvDtxj5jx_g&usqp=CAU);
+      }
+
+      #cont {
+        border: 1px solid White;
+        color: black;
+        background-color: rgb(245, 241, 218);
+        width: 450px;
+        text-align: center;
+        margin: auto;
+        margin-top: 350px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        border-radius: 5px;
+        font-weight: bolder;
+      }
+
+      h1:hover:not(.active) {
+        color: rgb(255, 0, 0);
+      }
+
+      .active {
+        background-color: #f70e0e;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cont">
+      <h1 onmouseover="bigImg(this)" onclick="product()">
+        Thanks For Purchasing
+      </h1>
+    </div>
+  </body>
+</html>
+
+<script>
+  function bigImg(x) {
+    x.style.height = "70px";
+    x.style.width = "500px";
+  }
+
+  function product() {
+    window.location.href = "products.html";
+  }
+</script>

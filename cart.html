@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9TM065QrtzDKoxYVhZ9s2XaShvDtxj5jx_g&usqp=CAU);
+      }
+
+      #cont {
+        display: grid;
+        grid-template-columns: repeat(1, 400px);
+        grid-gap: 30px;
+        align-content: center;
+        justify-content: center;
+        background-color: rgb(240, 237, 231);
+        width: 60%;
+        margin: auto;
+        margin-left: 30px;
+        border-radius: 8px;
+      }
+
+      .h {
+        margin: auto;
+      }
+
+      .header {
+        display: flex;
+        border-radius: 5px;
+        background-color: rgb(238, 214, 178);
+        color: blue;
+        margin: auto;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        width: 98%;
+        justify-content: space-around;
+      }
+
+      .child {
+        width: 75%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: rgb(247, 240, 240);
+        border: 1px dashed red;
+        overflow: hidden;
+        border-radius: 10px;
+      }
+      img {
+        width: 100%;
+        height: 200px;
+      }
+
+      button:hover {
+        cursor: pointer;
+      }
+
+      .button {
+        width: 100%;
+        color: black;
+        font-weight: bolder;
+        font-size: 21px;
+        border-radius: 5px;
+      }
+
+      #btn {
+        float: right;
+        background-color: black;
+        color: white;
+        padding: 5px 50px;
+        font-size: 25px;
+        margin: auto;
+        font-weight: 900;
+        font-family: Arial, Helvetica, sans-serif;
+        border-radius: 5px;
+      }
+
+      h2 {
+        text-align: center;
+        font-family: "Times New Roman";
+        font-weight: bold;
+        background-color: #b65927;
+        color: whitesmoke;
+        overflow: hidden;
+        border-radius: 3px;
+        padding: 7px 12px;
+      }
+
+      p {
+        border: 1px ridge white;
+        background-color: black;
+        color: whitesmoke;
+        text-align: center;
+        border-radius: 5px;
+        font-size: 22px;
+        font-family: "Amazon Ember", Arial, sans-serif;
+        font-weight: 700;
+        width: 50%;
+        margin: 10px auto;
+        padding: 10px 15px;
+      }
+      #flex {
+        display: flex;
+      }
+      #total {
+        background-color: rgb(241, 229, 210);
+        color: rgb(100, 7, 7);
+        border: 1px solid red;
+        width: 30%;
+        height: 500px;
+        margin-right: 35px;
+        border-radius: 5px;
+      }
+
+      #but {
+        width: 100%;
+        height: 80px;
+        margin: 20px auto;
+      }
+      #tt {
+        text-align: center;
+        font-size: 35px;
+        font-weight: bolder;
+      }
+      #int {
+        width: 80%;
+        margin: auto;
+        margin-left: 25px;
+        padding: 6px 10px;
+      }
+
+      #check {
+        padding: 12px 15px;
+        background-color: yellowgreen;
+        margin-top: 40px;
+        border-radius: 5px;
+      }
+      #app {
+        padding: 12px 15px;
+        background-color: yellowgreen;
+        margin-top: 40px;
+        border-radius: 5px;
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="h"><h1>CART PAGE</h1></div>
+      <button id="btn"></button>
+    </div>
+    <div id="flex">
+      <div id="cont"></div>
+      <div id="total">
+        <div id="tt"></div>
+        <div id="but">
+          <input
+            type="text"
+            name=""
+            id="int"
+            placeholder="Enter the Discount Code"
+          />
+          <br />
+          <button class="button" id="app" onclick="checkPromo()">
+            Apply Promo
+          </button>
+          <button class="button" id="check" onclick="checkOut()">
+            Check Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    
+  </body>
+</html>
+
+<script>
+  var cartItem = JSON.parse(localStorage.getItem("cartItems"));
+  //  console.log("cart : ", cartItem)
+  displayItem(cartItem);
+  var final_price = document.getElementById("tt");
+  function displayItem(cartItem) {
+    cartItem.map(function (elem, index) {
+      // console.log(index);
+      var div = document.createElement("div");
+      div.className = "child";
+
+      var img = document.createElement("img");
+      img.setAttribute("src", elem.image);
+
+      var h2 = document.createElement("h2");
+      h2.textContent = elem.name;
+
+      var price = document.createElement("p");
+      price.innerText = "Price  :  $" + elem.price;
+
+      var td4 = document.createElement("button");
+      td4.innerText = "Remove";
+      td4.style.padding = "10px";
+      td4.style.backgroundColor = "orange";
+      td4.className = "button";
+      td4.style.borderRadius = "5px";
+      td4.addEventListener("click", function () {
+        // console.log(index, "index");
+
+        deleteTask(index);
+      });
+      td4.addEventListener("click", refresh);
+
+      div.append(img, h2, price, td4);
+      document.querySelector("#cont").append(div);
+    });
+  }
+
+  function deleteTask(index) {
+    //  console.log(index)
+    cartItem.splice(index, 1);
+    localStorage.setItem("cartItems", JSON.stringify(cartItem));
+  }
+
+  function refresh() {
+    location.reload();
+  }
+
+  var total = cartItem.reduce(function (a, b) {
+    return a + Number(b.price);
+  }, 0);
+
+  var fprice = document.createElement("p");
+  fprice.innerHTML = "<b>Total Price : $.</b>" + total;
+  final_price.append(fprice);
+
+  function checkPromo() {
+    var promo = document.getElementById("int").value;
+    if (promo == "masai30") {
+      final_price.innerText = null;
+      var final = total - total * 0.3;
+
+      var newElement = document.createElement("p");
+      newElement.innerHTML =
+        "<b>Total Price : </b>" +
+        "<del> <i>" +
+        "<b> $.</b>" +
+        total +
+        " " +
+        "</i></del>" +
+        "<b><br></br>" +
+        "<b> Sub Total :  $.</b>" +
+        parseInt(final);
+      final_price.append(newElement);
+    } else {
+      alert("Invalid Coupon Code");
+    }
+    console.log(promo);
+  }
+
+  document.querySelector("#btn").textContent = "CART : " + cartItem.length;
+
+  function checkOut() {
+    window.location.href = "paymentForm.html";
+  }
+</script>
